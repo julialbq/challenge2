@@ -34,6 +34,7 @@ class Games
         end.compact
      
       end
+      game.delete([])
       game
     end
   
@@ -98,22 +99,29 @@ class Games
     def match_report
       game = gameline_matches()
       game.map do |match|
-       " game_#{game.index(match)}: {
-          total_kills: #{total_kill(match, 'killed')},
-          players: #{get_players(match, 'killer', 'killed')},
-          kills: {
-            #{kills_by_player(match)}
+        {
+          "game_#{game.index(match)}": {
+            total_kills: total_kill(match, 'killed'),
+            players: get_players(match, 'killer', 'killed'),
+            kills: kills_by_player(match),
           }
-        }"
+        }
       end
+    end
+
+    def game_report
+      game = gameline_matches.flatten
+      
+      "{
+      #{match_report}  
+      },
+      {
+      #{kills_by_player(game)}
+      }"
     end
   
   end
   
   game = Games.new('games.log')
-  puts game.match_report
+  puts game.game_report
   
-  # game = Games.new('example.log')
-  # puts game.match_report
-  # read = game.gameline_matches
-  # puts read
