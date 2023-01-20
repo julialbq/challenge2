@@ -1,20 +1,3 @@
-# def get_players(match, given_key1, given_key2)
-#   players = []
-#   killers = remove_duplicates(match, given_key1)
-#   killed = remove_duplicates(match, given_key2)
-  
-#   killers_modified = killers.delete_if{ |killer| killer == " <world>" }
-#   # comparar os dois arrays e adicionar em novo array todos 1x
-#   killers_modified.select do |player_arr1|
-#     players.push(player_arr1)
-#     killed.select do |player_arr2|
-#       if player_arr2 != player_arr1
-#         players.push(player_arr2)
-#       end
-#     end
-#     players
-# end
-
 class Games
     attr_reader :log
   
@@ -22,6 +5,33 @@ class Games
       @log = log
     end
   
+    
+    def match_report
+      game = gameline_matches()
+      game.map do |match|
+        {
+          "game_#{game.index(match)}": {
+            total_kills: total_kill(match, 'killed'),
+            players: get_players(match, 'killer', 'killed'),
+            kills: kills_by_player(match),
+          }
+        }
+      end
+    end
+
+    def game_report
+      game = gameline_matches.flatten
+      
+      "{
+      #{match_report}  
+      },
+      {
+      #{kills_by_player(game)}
+      }"
+    end
+
+    private
+
     def readFile
       file = File.foreach(log).slice_after(/InitGame/)
     end
@@ -95,29 +105,6 @@ class Games
       end
       killer_score.delete(" <world>")
       killer_score
-    end
-    def match_report
-      game = gameline_matches()
-      game.map do |match|
-        {
-          "game_#{game.index(match)}": {
-            total_kills: total_kill(match, 'killed'),
-            players: get_players(match, 'killer', 'killed'),
-            kills: kills_by_player(match),
-          }
-        }
-      end
-    end
-
-    def game_report
-      game = gameline_matches.flatten
-      
-      "{
-      #{match_report}  
-      },
-      {
-      #{kills_by_player(game)}
-      }"
     end
   
   end
