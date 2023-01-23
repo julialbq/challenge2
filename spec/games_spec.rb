@@ -1,9 +1,9 @@
-require_relative '../challenge2'
+require_relative '../src/games'
 require 'spec_helper'
 
 RSpec.describe Games do 
   describe '#match_report' do
-    subject(:games){described_class.new('example.log')}
+    subject(:games){described_class.new('spec/fixtures/example.log')}
 
     it 'returns a game report by match' do
       game_report = subject.match_report
@@ -13,18 +13,21 @@ RSpec.describe Games do
 
     it 'validates game report fields' do
       expected_game_report = {
-        "game_0": {
+        "game_1": {
           total_kills: 4,
           players: ["Isgalamido", "Mocinha", "Zeh", "Dono da Bola"],
           kills: {
-            " Isgalamido"=> 1
+            " Isgalamido"=>1,
+            "Dono da Bola"=>-1,
+            "Zeh"=>-2
           }
         }
       }
       game_report = subject.match_report
+      puts game_report
 
-      expect(game_report[0]).to eq(expected_game_report)
+      expect(game_report[1]).to eq(expected_game_report)
 
     end
-  end
+  end 
 end
