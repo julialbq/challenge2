@@ -19,6 +19,14 @@ class Games
       end
     end
 
+    def game_report
+      game = find_match.flatten
+      
+      {
+      game: match_report,
+      ranking: kills_by_player(game)
+      }
+    end
 
     private
 
@@ -84,8 +92,7 @@ class Games
       end
       
       killer_score.delete(" <world>")
-      killer_score
+      killer_score.sort_by{ |key, value| value }.reverse.to_h
     end
   
   end
-  
