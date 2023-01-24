@@ -5,13 +5,13 @@ RSpec.describe Games do
   describe '#match_report' do
     subject(:games){described_class.new('spec/fixtures/example.log')}
 
-    it 'returns a game report by match' do
+    it 'returns an Array' do
       game_report = subject.match_report
 
       expect(game_report).to be_an(Array)
     end
 
-    it 'validates game report fields' do
+    it 'returns expected game report' do
       expected_game_report = {
         "game_1": {
           total_kills: 4,
