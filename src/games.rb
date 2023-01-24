@@ -47,7 +47,7 @@ class Games
       end.slice_after(/InitGame/)
     end
   
-    def find_match(regex)
+    def match_lines(regex)
       game = read_file.map do |gamelines|
         gamelines.map do |gameline|
           match = gameline.match(regex)
@@ -60,10 +60,10 @@ class Games
     
     def count_deaths(match)
       match_count = match.group_by(&:itself).to_h do |death, means_of_death| 
-         [death.values, means_of_death.count].sort_by{ |key, value| value }
-       end
-       match_count.sort_by{ |key, value| value }.reverse.to_h
-     end
+        [death.values, means_of_death.count]
+      end
+      match_count.sort_by{ |key, value| value }.reverse.to_h
+    end
   
     def separate_values(match, given_key)
       results = match.flat_map do |gamer|

@@ -3,12 +3,10 @@ require 'spec_helper'
 
 RSpec.describe Games do 
   describe '#match_report' do
-    subject(:games){described_class.new('spec/fixtures/example.log')}
+    subject(:match_report){ described_class.new('spec/fixtures/example.log').match_report }
 
-    it 'returns an Array' do
-      game_report = subject.match_report
-
-      expect(game_report).to be_an(Array)
+    it 'returns a game report by match' do
+      expect(match_report).to be_an(Array)
     end
 
     it 'returns expected game report' do
@@ -23,18 +21,15 @@ RSpec.describe Games do
           }
         }
       }
-      game_report = subject.match_report
 
-      expect(game_report[1]).to eq(expected_game_report)
+      expect(match_report[1]).to eq(expected_game_report)
     end
   end
 
   describe '#game_report' do
-    subject(:games){described_class.new('spec/fixtures/example.log')}
+    subject(:game_report){ described_class.new('spec/fixtures/example.log').game_report }
 
     it 'returns a hash' do
-      game_report = subject.game_report
-
       expect(game_report).to be_an(Hash)
     end
 
@@ -56,19 +51,16 @@ RSpec.describe Games do
           ranking: {" Isgalamido"=>1, "Dono da Bola"=>-1, "Zeh"=>-2}
       }
 
-      game_report = subject.game_report
-
       expect(game_report).to eq(expected_final_report)
     end
   end
 
   describe '#death_report' do
-    subject(:games){described_class.new('spec/fixtures/example.log')}
+    subject(:death_report) { described_class.new('spec/fixtures/example.log').death_report }
 
     it 'returns an array' do
-      game_report = subject.death_report
-
-      expect(game_report).to be_an(Array)
+      p death_report
+      expect(death_report).to be_an(Array)
     end
 
     it 'returns expected death report' do
@@ -80,8 +72,6 @@ RSpec.describe Games do
           [" MOD_ROCKET"] => 1}}
         }
       ]
-
-      death_report = subject.death_report
 
       expect(death_report).to eq(expected_death_report)
     end
