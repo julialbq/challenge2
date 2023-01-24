@@ -61,4 +61,29 @@ RSpec.describe Games do
       expect(game_report).to eq(expected_final_report)
     end
   end
+
+  describe '#death_report' do
+    subject(:games){described_class.new('spec/fixtures/example.log')}
+
+    it 'returns an array' do
+      game_report = subject.death_report
+
+      expect(game_report).to be_an(Array)
+    end
+
+    it 'returns expected death report' do
+      expected_death_report = [
+        { game_0: {deaths: {}}}, 
+        { game_1: {deaths: {
+          [" MOD_TRIGGER_HURT"] => 2, 
+          [" MOD_FALLING"] => 1, 
+          [" MOD_ROCKET"] => 1}}
+        }
+      ]
+
+      death_report = subject.death_report
+
+      expect(death_report).to eq(expected_death_report)
+    end
+  end
 end
