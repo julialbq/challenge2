@@ -7,7 +7,7 @@ class Games
   
     
     def match_report
-      game =  find_match()
+      game =  find_match(/:(?<killer>[^:]+) killed (?<killed>.+) by/)
       game.map do |match|
         {
           "game_#{game.index(match)}": {
@@ -20,12 +20,23 @@ class Games
     end
 
     def game_report
-      game = find_match.flatten
+      game = find_match(/:(?<killer>[^:]+) killed (?<killed>.+) by/).flatten
       
       {
       game: match_report,
       ranking: kills_by_player(game)
       }
+    end
+
+    def death_report
+      game = find_match(/(?<death> MOD_.+)/).to_a
+      game.map do |match|
+        {
+          "game_#{game.index(match)}": {
+              deaths: count_deaths(match)
+          }
+        }
+      end
     end
 
     private
@@ -36,18 +47,23 @@ class Games
       end.slice_after(/InitGame/)
     end
   
-    def find_match
+    def find_match(regex)
       game = read_file.map do |gamelines|
         gamelines.map do |gameline|
-          match = gameline.match(/:(?<killer>[^:]+) killed (?<killed>.+) by/)
+          match = gameline.match(regex)
           match ? match.named_captures : nil
         end.compact
      
       end
-    #   game.delete([])
       game
     end
-
+    
+    def count_deaths(match)
+      match_count = match.group_by(&:itself).to_h do |death, means_of_death| 
+         [death.values, means_of_death.count].sort_by{ |key, value| value }
+       end
+       match_count.sort_by{ |key, value| value }.reverse.to_h
+     end
   
     def separate_values(match, given_key)
       results = match.flat_map do |gamer|
