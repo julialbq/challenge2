@@ -32,13 +32,13 @@ RSpec.describe Games do
   describe '#game_report' do
     subject(:games){described_class.new('spec/fixtures/example.log')}
 
-    it 'returns a game report by match and ranking by kills' do
+    it 'returns a hash' do
       game_report = subject.game_report
 
       expect(game_report).to be_an(Hash)
     end
 
-    it 'validates game report and ranking by kills fields' do
+    it 'returns expected game report' do
       expected_final_report = {
         game: 
         [{
