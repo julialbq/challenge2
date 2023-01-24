@@ -7,7 +7,7 @@ class Games
   
     
     def match_report
-      game =  find_match(/:(?<killer>[^:]+) killed (?<killed>.+) by/)
+      game =  match_lines(/:(?<killer>[^:]+) killed (?<killed>.+) by/)
       game.map do |match|
         {
           "game_#{game.index(match)}": {
@@ -20,7 +20,7 @@ class Games
     end
 
     def game_report
-      game = find_match(/:(?<killer>[^:]+) killed (?<killed>.+) by/).flatten
+      game = match_lines(/:(?<killer>[^:]+) killed (?<killed>.+) by/).flatten
       
       {
       game: match_report,
@@ -29,7 +29,7 @@ class Games
     end
 
     def death_report
-      game = find_match(/(?<death> MOD_.+)/).to_a
+      game = match_lines(/(?<death> MOD_.+)/).to_a
       game.map do |match|
         {
           "game_#{game.index(match)}": {
